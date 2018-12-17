@@ -3,12 +3,30 @@ import libtcodpy as lbtc
 
 from render_functions import RenderOrder
 
+'''
+What does this do?
+This creates the framework to build things in our world, things that have
+position (x, y), a character representation with color, a name, if it blocks, render_order
+if its a fighter, if it has ai, if its an item, and inventory?
+Has some basic functions
+move, move_towards, move_astar, distance, distance_to, and outside the entity class there is
+get_blocking_entities_at_location
+
+So it handles pretty basic stuff that almost everyone will have
+'''
+
 class Entity:
     ''' 
     A generic object to represent players, enemies, items, etc.
     Inputs: x, y (positions), character, color, name, optionals: blocks, fighter, ai
     '''
-    def __init__(self, x, y, char, color, name, blocks=False, render_order=RenderOrder.CORPSE, fighter=None, ai=None):
+    def __init__(self, x, y, char, color, name, blocks=False, render_order=RenderOrder.CORPSE,
+        fighter=None, ai=None, item=None, inventory=None, stairs=None, level=None):
+        '''
+            here are all the info on entities that they will carry.
+            x, y, character representation, color, name, blocks=False, render_order=RenderOrder.CORPSE,
+            fighter=None, ai=None, item=None, inventory=None, stairs=None
+        '''
         self.x = x
         self.y = y
         self.char = char
@@ -18,6 +36,10 @@ class Entity:
         self.render_order = render_order
         self.fighter = fighter
         self.ai = ai
+        self.item = item
+        self.inventory = inventory
+        self.stairs = stairs
+        self.level = level
         
         if self.fighter:
             self.fighter.owner = self
@@ -25,12 +47,30 @@ class Entity:
         if self.ai:
             self.ai.owner = self
         
+        if self.item:
+            self.item.owner = self
+            
+        if self.inventory:
+            self.inventory.owner = self
+            
+        if self.stairs:
+            self.stairs.owner = self
+            
+        if self.level:
+            self.level.owner = self
+        
     def move(self, dx, dy):
+        '''
+            Simply makes someone move given the amount for x and y (dx, dy)
+        '''
         #Move the entity by a given amount
         self.x += dx
         self.y += dy
         
     def move_towards(self, target_x, target_y, game_map, entities):
+        '''
+            makes an entity move toward something, given target_x and _y, the game_map and entities
+        '''
         dx = target_x - self.x
         dy = target_y - self.y
         distance = math.sqrt(dx ** 2 + dy ** 2)
@@ -43,6 +83,9 @@ class Entity:
             self.move(dx, dy)
             
     def move_astar(self, target, entities, game_map):
+        '''
+            Makes it so you travel the fastest path from one place to another
+        '''
         # Create a FOV map that has the dimensions of the map
         fov = lbtc.map_new(game_map.width, game_map.height)
 
@@ -84,14 +127,26 @@ class Entity:
 
             # Delete the path to free memory
         lbtc.path_delete(my_path)
+        
+    def distance(self, x, y):
+        '''
+        Measures the distance from self to any x, y space
+        '''
+        return math.sqrt((x - self.x) ** 2 + (y - self.y) ** 2)
             
     def distance_to(self, other):
+        '''
+            Measures the distance of 2 entities, from self to other, only gets 1 var = other entity 
+        '''
         dx = other.x - self.x
         dy = other.y - self.y
         return math.sqrt(dx ** 2 + dy ** 2)
         
     
 def get_blocking_entities_at_location(entities, destination_x, destination_y):
+        '''
+            Pretty self explanatory, checks on a destination_x and _y if an entity is blocking the way
+        '''
         for entity in entities:
             if entity.blocks and entity.x == destination_x and entity.y == destination_y:
                 return entity
