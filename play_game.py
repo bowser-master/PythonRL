@@ -60,6 +60,7 @@ def play_game(player, entities, game_map, message_log, game_state, con, panel, c
         take_stairs = action.get('take_stairs')
         wait = action.get('wait')
         
+        
         #4th wall stuff?
         exit = action.get('exit')
         fullscreen = action.get('fullscreen')
@@ -137,12 +138,12 @@ def play_game(player, entities, game_map, message_log, game_state, con, panel, c
         
         if level_up:
             if level_up == 'hp':
-                player.fighter.max_hp += 20
+                player.fighter.base_max_hp += 20
                 player.fighter.hp += 20
             elif level_up == 'str':
-                player.fighter.power += 1
+                player.fighter.base_power += 1
             elif level_up == 'def':
-                player.fighter.defense += 1
+                player.fighter.base_defense += 1
                 
             game_state = previous_game_state
             
@@ -180,6 +181,7 @@ def play_game(player, entities, game_map, message_log, game_state, con, panel, c
         for player_turn_result in player_turn_results:
             message = player_turn_result.get('message')
             dead_entity = player_turn_result.get('dead')
+            equip = player_turn_result.get('equip')
             item_added = player_turn_result.get('item_added')
             item_consumed = player_turn_result.get('consumed')
             item_dropped = player_turn_result.get('item_dropped')
@@ -216,6 +218,21 @@ def play_game(player, entities, game_map, message_log, game_state, con, panel, c
                 
                 game_state = GameStates.ENEMY_TURN
                 
+            if equip:
+                equip_results = player.equipment.toggle_equip(equip)
+                
+                for equip_result in equip_results:
+                    equipped = equip_result.get('equipped')
+                    dequipped = equip_result.get('dequipped')
+                    
+                    if equipped:
+                        message_log.add_message(Message('You equipped the {0}.'.format(equipped.name)))
+                    
+                    if dequipped:
+                        message_log.add_message(Message('You dequipped the {0}.'.format(dequipped.name)))
+                
+                game_state = GameStates.ENEMY_TURN
+            
             if targeting:
                 previous_game_state = GameStates.PLAYERS_TURN
                 game_state = GameStates.TARGETING

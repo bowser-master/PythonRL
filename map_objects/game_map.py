@@ -5,6 +5,8 @@ from components.ai import BasicMonster
 from components.fighter import Fighter
 from components.item import Item
 from components.stairs import Stairs
+from components.equipment import EquipmentSlots
+from components.equippable import Equippable
 
 from item_functions import heal, cast_lightning, cast_fireball, cast_confuse
 
@@ -33,6 +35,26 @@ class GameMap:
         self.height = height
         self.tiles = self.initialize_tiles()
         self.dungeon_level = dungeon_level
+        
+    def to_json(self):
+        json_data = {
+            'width': self.width,
+            'height': self.height,
+            'tiles': [[tile.to_json() for tile in tile_rows] for tile_rows in self.tiles]
+        }
+
+        return json_data
+
+    @staticmethod
+    def from_json(json_data):
+        width = json_data.get('width')
+        height = json_data.get('height')
+        tiles_json = json_data.get('tiles')
+
+        game_map = GameMap(width, height)
+        game_map.tiles = Tile.from_json(tiles_json)
+
+        return game_map
         
     def initialize_tiles(self):
         tiles = [[Tile(True) for y in range(self.height)] for x in range(self.width)]
@@ -142,10 +164,12 @@ class GameMap:
         }
             
         item_chances = {
-        'healing_potion': 70,
-        'lightning_scrool': from_dungeon_level([[25, 4]], self.dungeon_level),
-        'fireball_spell': from_dungeon_level([[25, 6]], self.dungeon_level),
-        'confusion_scroll': from_dungeon_level([[10, 2]], self.dungeon_level)
+        'healing_potion': 10,
+        'sword': from_dungeon_level([[900, 1]], self.dungeon_level),
+        'shield': from_dungeon_level([[900, 1]], self.dungeon_level),
+        'lightning_scrool': from_dungeon_level([[25, 1]], self.dungeon_level),
+        'fireball_spell': from_dungeon_level([[25, 1]], self.dungeon_level),
+        'confusion_scroll': from_dungeon_level([[10, 1]], self.dungeon_level)
         }
         
         #Creating MONSTERS
@@ -158,13 +182,13 @@ class GameMap:
                 monster_choice = random_choice_from_dict(monster_chances)
                 
                 if monster_choice == 'orc':
-                    figther_component = Fighter(hp=10, defense=0, power=3, xp=35)
+                    figther_component = Fighter(hp=10, defense=0, power=3, xp=100)
                     ai_component = BasicMonster()
                     
                     monster = Entity(x, y, 'o', lbtc.desaturated_green, 'Orc', blocks=True, 
                                    render_order=RenderOrder.ACTOR, fighter=figther_component, ai=ai_component)
                 else:
-                    figther_component = Fighter(hp=16, defense=1, power=4, xp=100)
+                    figther_component = Fighter(hp=16, defense=1, power=4, xp=200)
                     ai_component = BasicMonster()
                     monster = Entity(x, y, 'T', lbtc.darker_green, 'Troll', blocks=True, 
                                    render_order=RenderOrder.ACTOR, fighter=figther_component, ai=ai_component)
@@ -184,16 +208,27 @@ class GameMap:
                     item_component = Item(use_function=heal, amount=4)
                     item = Entity(x, y, '!', lbtc.violet, 'Healing Potion', 
                             render_order=RenderOrder.ITEM, item=item_component)
+                
+                elif item_choice == 'sword':
+                    equippable_component = Equippable(EquipmentSlots.MAIN_HAND, power_bonus=3)
+                    item = Entity(x, y, '/', lbtc.sky, 'Sword', equippable=equippable_component)
+                
+                elif item_choice == 'shield':
+                    equippable_component = Equippable(EquipmentSlots.OFF_HAND, defense_bonus=1)
+                    item = Entity(x, y, '[', lbtc.darker_orange, 'Shield', equippable=equippable_component)
+                
                 elif item_choice == 'lightning_scroll':
                     item_component = Item(use_function=cast_lightning, damage=20, maximum_range=5)
                     item = Entity(x, y, '#', lbtc.yellow, 'Lightning Scroll', render_order=RenderOrder.ITEM,
                                 item=item_component)
+                
                 elif item_choice == 'fireball_scroll':
                     item_component = Item(use_function=cast_fireball, targeting=True, targeting_message=Message(
                             'Left-click a target tile for the fireball, or right-click to cancel.', lbtc.light_cyan),
                             damage=12, radius=3)
                     item = Entity(x, y, '#', lbtc.red, 'Fireball Scroll', render_order=RenderOrder.ITEM,
                             item=item_component)
+                
                 else:
                     item_component = Item(use_function=cast_confuse, targeting=True, targeting_message=Message(
                             'Left-click an enemy to confuse it, or right-click to cancel.', lbtc.light_cyan))

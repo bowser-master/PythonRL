@@ -135,12 +135,12 @@ def handle_level_up_menu(key):
     if key:
         key_char = chr(key.c)
         
-        if key_char == 'a':
-            return {'level_up ': 'hp'}
-        elif key_char == 'b':
-            return {'level_up ': 'str'}
-        elif key_char == 'c':
-            return {'level_up ': 'def'}
+        if key_char == 'a' or key.vk == lbtc.KEY_KP1:
+            return {'level_up': 'hp'}
+        elif key_char == 'b' or key.vk == lbtc.KEY_KP2:
+            return {'level_up': 'str'}
+        elif key_char == 'c' or key.vk == lbtc.KEY_KP3:
+            return {'level_up': 'def'}
     
     return{}
     

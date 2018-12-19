@@ -15,7 +15,7 @@ def random_choice_index(chances):
     for w in chances:
         running_sum += w
         
-        if random_chance <= running_sum:
+        if random_choice <= running_sum:
             return choice
         choice +=1
         
@@ -24,4 +24,4 @@ def random_choice_from_dict(choice_dict):
     choices = list(choice_dict.keys())
     chances = list(choice_dict.values())
     
-    return choices = [random_choice_index(chances)]
+    return choices[random_choice_index(chances)]

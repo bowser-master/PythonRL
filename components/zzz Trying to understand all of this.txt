@@ -1,0 +1,17 @@
+SOOO
+From what I understood from Entity-Component-Systems
+
+You make an Entity that is basically an ID for each and every thing (obj) in your game
+ex: Player, monster, floor, stairs, items, wind, evil measure in the world ? anything...
+
+Then you fill them with components. These will fill in the data of each entity
+ex: position, stats, speed, sprite. some of the above may have some of them but not others
+
+Systems handle the logic between entities and its components
+ex: taking damage, exploding, teleporting, falling down, etc
+
+THESE components from this roguelike basically mixed components and systems togheter making
+it a bit lighter on calling every shit up (maybe not really, cause you still have to call all
+the shit from everywere in play_game and stuff and now that I understand why its pretty nice)
+
+That's it I guess

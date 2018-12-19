@@ -3,6 +3,7 @@ import libtcodpy as lbtc
 from components.fighter import Fighter
 from components.inventory import Inventory
 from components.level import Level
+from components.equipment import Equipment
 
 from entity import Entity
 
@@ -46,8 +47,8 @@ def get_constants():
     fov_radius = 10 #Self explanatory
     
     #Entities Variables
-    max_monsters_per_room = 3
-    max_items_per_room = 6
+    max_monsters_per_room = 6
+    max_items_per_room = 15
     
     colors = {
         'dark_wall': lbtc.Color(0, 0, 100),
@@ -87,8 +88,10 @@ def get_game_variables(constants):
     fighter_component = Fighter(hp=30, defense=2, power=5)
     inventory_component = Inventory(26)
     level_component = Level()
+    equipment_component = Equipment()
     player = Entity(0, 0, '@', lbtc.white, 'Player', blocks=True, render_order=RenderOrder.ACTOR,
-                fighter=fighter_component, inventory=inventory_component, level=level_component)
+                fighter=fighter_component, inventory=inventory_component, level=level_component,
+                equipment=equipment_component)
                 
     entities = [player]
     
