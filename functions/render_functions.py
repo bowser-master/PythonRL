@@ -22,6 +22,7 @@ def get_names_under_mouse(mouse, entities, fov_map):
     return names.capitalize()
     
 def render_bar(panel, x, y, total_width, name, value, maximum, bar_color, back_color):
+    #ok, its making THE HP BAR bitch 
     bar_width = int(float(value) / maximum * total_width )
     
     lbtc.console_set_default_background(panel, back_color)
@@ -35,8 +36,10 @@ def render_bar(panel, x, y, total_width, name, value, maximum, bar_color, back_c
     lbtc.console_print_ex(panel, int(x + total_width / 2), y, lbtc.BKGND_NONE, lbtc.CENTER,
                             '{0}: {1}/{2}'.format(name, value, maximum))
     
-def render_all(con, panel, entities, player, game_map, fov_map, fov_recompute, message_log, screen_width, screen_height,
-                bar_width, panel_height, panel_y, mouse, colors, game_state):
+def render_all(con, panel, sidebar, entities, player, game_map, fov_map, fov_recompute, message_log, screen_width, screen_height,
+                bar_width, panel_width, panel_height, panel_y, sidebar_width, sidebar_x, mouse, colors, game_state):
+    
+    
     #Draw all tiles in the game map
     if fov_recompute:
         for y in range(game_map.height):
@@ -65,21 +68,33 @@ def render_all(con, panel, entities, player, game_map, fov_map, fov_recompute, m
     #Draw all entities in the list
     for entity in entities_in_render_order:
         draw_entity(con, entity, fov_map, game_map)
-        
+    
+    #Here he is configuring the panel!
     lbtc.console_set_default_foreground(panel, lbtc.black)
-
-    lbtc.console_blit(con, 0, 0, screen_width, screen_height, 0, 0, 0)
+    #test
+    lbtc.console_set_default_foreground(sidebar, lbtc.black)
+    
+    #console_blit puts a console on top of another, not sure why he put it specifically here
+    lbtc.console_blit(con, 0, 0, screen_width - sidebar_width, screen_height, 0, 0, panel_height)
+    
     
     lbtc.console_set_default_background(panel, lbtc.black)
     lbtc.console_clear(panel)
     
+    #TEST
+    
+    lbtc.console_set_default_background(sidebar, lbtc.black)
+    lbtc.console_clear(sidebar)
+    
     #Print the game messages, one line at a time
     y = 1
     for message in message_log.messages:
-        lbtc.console_set_default_foreground(panel, message.color)
-        lbtc.console_print_ex(panel, message_log.x, y, lbtc.BKGND_NONE, lbtc.LEFT, message.text)
+        lbtc.console_set_default_foreground(sidebar, message.color)
+        lbtc.console_print_ex(sidebar, 0, y, lbtc.BKGND_NONE, lbtc.LEFT, message.text)
         y += 1
     
+    #Just the char info stuff, nothing to worry about now
+    ####################################################################
     render_bar(panel, 1, 1, bar_width, 'HP', player.fighter.hp, player.fighter.max_hp,
                 lbtc.light_red, lbtc.darker_red)
                 
@@ -89,8 +104,10 @@ def render_all(con, panel, entities, player, game_map, fov_map, fov_recompute, m
     lbtc.console_set_default_foreground(panel, lbtc.light_gray)
     lbtc.console_print_ex(panel, 1, 0, lbtc.BKGND_NONE, lbtc.LEFT,
                             get_names_under_mouse(mouse, entities, fov_map))
+    #####################################################################
     
-    lbtc.console_blit(panel, 0, 0, screen_width, panel_height, 0, 0, panel_y)
+    lbtc.console_blit(panel, 0, 0, panel_width, panel_height, 0, 0, panel_y)
+    lbtc.console_blit(sidebar, 0, 0, sidebar_width, screen_height, 0, sidebar_x, 0)
     
     if game_state in (GameStates.SHOW_INVENTORY, GameStates.DROP_INVENTORY):
         if game_state == GameStates.SHOW_INVENTORY:

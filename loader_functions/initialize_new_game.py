@@ -18,22 +18,29 @@ def get_constants():
     window_title = 'Roguelike Tut'
     
     #Screen Variables 
-    screen_width = 80
-    screen_height = 50
-    
-    #Map Variables
-    map_width = 80
-    map_height = 43
+    screen_width = 100 #was 80
+    screen_height = 62 #was 50
     
     #Panel Variables
-    bar_width = 20
+    bar_width = screen_width//4
+    panel_width = screen_width//4
     panel_height = 7
-    panel_y = screen_height - panel_height
+    panel_y = 0 #was screen_height - panel_height
+    
+    #Sidebar Variables
+    sidebar_width = screen_width//4
+    sidebar_height = screen_height
+    sidebar_x = screen_width - sidebar_width
+    
+    #Map Variables
+    map_width = 3*screen_width//4
+    map_y = 7
+    map_height = 43
     
     #Message
-    message_x = bar_width + 2
-    message_width = screen_width - bar_width - 2
-    message_height = panel_height - 1
+    message_x = sidebar_width + 2
+    message_width = sidebar_width - 1
+    message_height = sidebar_height - 1
     
     #Rooms Variables
     room_max_size = 10
@@ -64,8 +71,12 @@ def get_constants():
         'map_width': map_width,
         'map_height': map_height,
         'bar_width': bar_width,
+        'panel_width': panel_width,
         'panel_height': panel_height,
         'panel_y': panel_y,
+        'sidebar_height': sidebar_height,
+        'sidebar_width': sidebar_width,
+        'sidebar_x': sidebar_x,
         'message_x': message_x,
         'message_width': message_width,
         'message_height': message_height,        

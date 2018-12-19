@@ -14,7 +14,7 @@ from loader_functions.data_loaders import save_game
 
 
 
-def play_game(player, entities, game_map, message_log, game_state, con, panel, constants):
+def play_game(player, entities, game_map, message_log, game_state, con, panel, sidebar, constants):
 
     fov_recompute = True #only computes FOV if the player moves! On by default cause we need it when game starts
     fov_map = initialize_fov(game_map)
@@ -34,9 +34,9 @@ def play_game(player, entities, game_map, message_log, game_state, con, panel, c
         if fov_recompute:
             recompute_fov(fov_map, player.x, player.y, constants['fov_radius'], constants['fov_light_walls'], constants['fov_algorithm'])
         
-        render_all(con, panel, entities, player, game_map, fov_map, fov_recompute, message_log, 
-            constants['screen_width'], constants['screen_height'], constants['bar_width'], 
-            constants['panel_height'], constants['panel_y'], mouse, constants['colors'], game_state)
+        render_all(con, panel, sidebar, entities, player, game_map, fov_map, fov_recompute, message_log, 
+            constants['screen_width'], constants['screen_height'], constants['bar_width'], constants['panel_width'],
+            constants['panel_height'], constants['panel_y'], constants['sidebar_width'], constants['sidebar_x'], mouse, constants['colors'], game_state)
         
         fov_recompute = False
         

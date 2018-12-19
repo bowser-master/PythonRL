@@ -1,10 +1,5 @@
 import libtcodpy as lbtc
 
-from functions.death_functions import kill_monster, kill_player
-from functions.render_functions import clear_all, render_all
-from functions.fov_functions import initialize_fov, recompute_fov
-
-from game_things.game_messages import Message
 from game_things.game_states import GameStates
 from game_things.play_game import play_game
 from game_things.menus import main_menu, message_box
@@ -12,12 +7,11 @@ from game_things.menus import main_menu, message_box
 from loader_functions.initialize_new_game import get_constants, get_game_variables
 from loader_functions.data_loaders import load_game, save_game
 
-from misc.input_handlers import handle_keys, handle_mouse, handle_main_menu
-from misc.entity import get_blocking_entities_at_location
-
+from misc.input_handlers import handle_main_menu
 
 '''
-This is our main executable file that runs our game loop
+This is our main executable file that manages our stuff
+game loop moved to play_game.py which is called here
 '''
 def main():
     constants = get_constants()
@@ -28,7 +22,10 @@ def main():
     
 	#console which we are working with to make new consoles in the future
     con = lbtc.console_new(constants['screen_width'], constants['screen_height'])
-    panel = lbtc.console_new(constants['screen_width'], constants['panel_height'])
+    #character stuff panel ?
+    panel = lbtc.console_new(constants['panel_width'], constants['panel_height'])
+    #sidebar stuff
+    sidebar = lbtc.console_new(constants['sidebar_width'], constants['sidebar_height'])
     
     player = None
     entities = []
@@ -79,7 +76,7 @@ def main():
                 break
         else:
             lbtc.console_clear(con)
-            play_game(player, entities, game_map, message_log, game_state, con, panel, constants)
+            play_game(player, entities, game_map, message_log, game_state, con, panel, sidebar, constants)
             
             show_main_menu = True
                 
