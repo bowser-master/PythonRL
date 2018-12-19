@@ -8,14 +8,13 @@ from components.stairs import Stairs
 from components.equipment import EquipmentSlots
 from components.equippable import Equippable
 
-from item_functions import heal, cast_lightning, cast_fireball, cast_confuse
+from functions.item_functions import heal, cast_lightning, cast_fireball, cast_confuse
+from functions.render_functions import RenderOrder
 
-from game_messages import Message
+from game_things.game_messages import Message
 
-from random_utils import random_choice_from_dict, from_dungeon_level
-
-from entity import Entity
-from render_functions import RenderOrder
+from misc.random_utils import random_choice_from_dict, from_dungeon_level
+from misc.entity import Entity
 
 from map_objects.rectangle import Rect
 from map_objects.tile import Tile

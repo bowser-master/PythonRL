@@ -5,15 +5,14 @@ from components.inventory import Inventory
 from components.level import Level
 from components.equipment import Equipment
 
-from entity import Entity
+from misc.entity import Entity
 
-from game_messages import MessageLog
-
-from game_states import GameStates
+from game_things.game_messages import MessageLog
+from game_things.game_states import GameStates
 
 from map_objects.game_map import GameMap
 
-from render_functions import RenderOrder
+from functions.render_functions import RenderOrder
 
 def get_constants():
     window_title = 'Roguelike Tut'

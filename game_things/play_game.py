@@ -1,13 +1,17 @@
 import libtcodpy as lbtc
 
-from death_functions import kill_monster, kill_player
-from input_handlers import handle_keys, handle_mouse, handle_main_menu
-from entity import get_blocking_entities_at_location
-from fov_functions import initialize_fov, recompute_fov
-from game_messages import Message
-from game_states import GameStates
+from functions.death_functions import kill_monster, kill_player
+from functions.fov_functions import initialize_fov, recompute_fov
+from functions.render_functions import clear_all, render_all
+
+from misc.input_handlers import handle_keys, handle_mouse, handle_main_menu
+from misc.entity import get_blocking_entities_at_location
+
+from game_things.game_messages import Message
+from game_things.game_states import GameStates
+
 from loader_functions.data_loaders import save_game
-from render_functions import clear_all, render_all
+
 
 
 def play_game(player, entities, game_map, message_log, game_state, con, panel, constants):

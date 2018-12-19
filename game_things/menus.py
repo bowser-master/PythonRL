@@ -89,8 +89,8 @@ def character_screen(player, character_screen_width, character_screen_height, sc
     y = screen_height // 2 - character_screen_height // 2
     lbtc.console_blit(window, 0, 0, character_screen_width, character_screen_height, 0, x, y, 1.0, 0.7)
     
-def message_box(con, header, width, screen_width, scree_height):
-    menu(con, header, [], width, screen_width, scree_height)
+def message_box(con, header, width, screen_width, screen_height):
+    menu(con, header, [], width, screen_width, screen_height)
     
     
     

@@ -2,7 +2,7 @@ import libtcodpy as lbtc
 
 from random import randint
 
-from game_messages import Message
+from game_things.game_messages import Message
 
 
 class BasicMonster:

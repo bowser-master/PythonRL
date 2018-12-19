@@ -1,10 +1,9 @@
 import json
 
-from entity import Entity
+from misc.entity import Entity
 
-from game_messages import MessageLog
-
-from game_states import GameStates
+from game_things.game_messages import MessageLog
+from game_things.game_states import GameStates
 
 from map_objects.game_map import GameMap
 

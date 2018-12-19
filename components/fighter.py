@@ -1,6 +1,6 @@
 import libtcodpy as lbtc
 
-from game_messages import Message
+from game_things.game_messages import Message
 
 '''
 What does this class do?

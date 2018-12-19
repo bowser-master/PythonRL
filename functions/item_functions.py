@@ -1,7 +1,7 @@
 import libtcodpy as lbtc
 
 from components.ai import ConfusedMonster
-from game_messages import Message
+from game_things.game_messages import Message
 
 '''
 What does this do?
